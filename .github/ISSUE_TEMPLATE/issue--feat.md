@@ -1,7 +1,7 @@
 ---
 name: 'Issue: feat'
 about: For adding features.
-title: "[Chore]"
+title: "[Feat]"
 labels: feature
 assignees: ''
 
