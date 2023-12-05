@@ -4,7 +4,7 @@ import com.manytooneserverjava.manito.domain.Manito;
 import com.manytooneserverjava.manito.domain.ManitoRepository;
 import com.manytooneserverjava.manitomember.domain.ManitoMember;
 import com.manytooneserverjava.manitomember.domain.ManitoMemberRepository;
-import com.manytooneserverjava.manitomember.web.ManitoCreateForm;
+import com.manytooneserverjava.manito.web.ManitoCreateForm;
 import com.manytooneserverjava.member.domain.Member;
 import com.manytooneserverjava.member.domain.MemberRepository;
 import jakarta.transaction.Transactional;
@@ -23,21 +23,21 @@ public class ManitoService {
 
     /**
      * 입력한 요청값을 바탕으로 마니또 모임을 형성하고 생성자를 마니또 모임장으로 추가하는 매서드
-     * @param memberId
      * @param form
      * @return 저장된 마니또 객체의 ID를 반환
      */
     @Transactional
-    public Long createManito(Long memberId, ManitoCreateForm form) {
+    public Long createManito(ManitoCreateForm form) {
         // 마니또 생성 로직
         Manito manito = Manito.builder()
                 .name(form.name())
                 .endDateTime(form.endDateTime())
+                .status(false)
                 .build();
         Manito savedManito = manitoRepository.save(manito);
 
         // 마니또 회원 추가 로직 (최초 마니또 생성자는 리더가 된다.)
-        Member findMember = memberRepository.findById(memberId).get();
+        Member findMember = memberRepository.findById(form.memberId()).get();
         ManitoMember manitoMember = ManitoMember.builder()
                 .member(findMember)
                 .manito(savedManito)
@@ -57,7 +57,7 @@ public class ManitoService {
     @Transactional
     public void initiateManito(Long manitoId) {
         // 가입된 마니또 회원 목록 조회
-        List<ManitoMember> manitoMembersInSameGroup = manitoMemberRepository.findManitoMembersInSameGroup(manitoId);
+        List<ManitoMember> manitoMembersInSameGroup = manitoMemberRepository.findManitoMembersInSameGroup(manitoId, 1);
         // 마니또 매칭 코드
         HashMap<ManitoMember, ManitoMember> match = matchManito(manitoMembersInSameGroup);
         // 마니또 매칭 내역 적용
@@ -78,7 +78,16 @@ public class ManitoService {
         findManito.updateManito(false, findManito.getEndDateTime());
     }
 
+    public List<Manito> findMyManito(Long memberId) {
+        return null;
+    }
 
+
+    /**
+     * 마니또 매칭 매서드
+     * @param manitoMembersInSameGroup
+     * @return
+     */
     private HashMap<ManitoMember, ManitoMember> matchManito(List<ManitoMember> manitoMembersInSameGroup) {
         int[] ch = new int[manitoMembersInSameGroup.size()];
         HashMap<ManitoMember, ManitoMember> match = new HashMap<>();
