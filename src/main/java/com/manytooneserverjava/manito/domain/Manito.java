@@ -7,6 +7,7 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -33,7 +34,7 @@ public class Manito extends BaseEntity {
 
     @OneToMany
     @JoinColumn(name = "manito_id")
-    private ArrayList<ManitoMember> manitoMembers = new ArrayList<>();
+    private List<ManitoMember> manitoMembers = new ArrayList<>();
 
     public void updateManito(Boolean updateStatusParam, LocalDateTime updateEndDateTimeParam) {
         this.status = updateStatusParam;
