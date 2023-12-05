@@ -2,6 +2,7 @@ package com.manytooneserverjava.manitomember.service;
 
 import com.manytooneserverjava.manito.domain.Manito;
 import com.manytooneserverjava.manito.domain.ManitoRepository;
+import com.manytooneserverjava.manito.web.ManitoDto;
 import com.manytooneserverjava.manitomember.domain.ManitoMember;
 import com.manytooneserverjava.manitomember.domain.ManitoMemberRepository;
 import com.manytooneserverjava.manitomember.web.GiftInfoForm;
@@ -28,7 +29,7 @@ public class ManitoMemberService {
      * @param memberId
      */
     @Transactional
-    public void inviteManitoMember(Long manitoId, Long memberId) {
+    public Long inviteManitoMember(Long manitoId, Long memberId) {
         Member findMember = memberRepository.findById(memberId).get();
         Manito findManito = manitoRepository.findById(manitoId).get();
         ManitoMember manitoMember = ManitoMember.builder()
@@ -37,7 +38,7 @@ public class ManitoMemberService {
                 .status(0)
                 .isLeader(false)
                 .build();
-        manitoMemberRepository.save(manitoMember);
+        return manitoMemberRepository.save(manitoMember).getId();
     }
 
     /**
@@ -82,5 +83,16 @@ public class ManitoMemberService {
         ManitoMember findManitoMember = manitoMemberRepository.findById(form.manitoMemberId()).get();
         findManitoMember.editGiftInfo(form.wantedGift(), form.unwantedGift());
     }
+
+    public List<ManitoDto> findMyManitos(Long memberId) {
+        List<Manito> myManitos = manitoMemberRepository.findMyManito(memberId);
+        List<ManitoDto> findManitos = new ArrayList<>();
+        for (Manito manito : myManitos) {
+            findManitos.add(new ManitoDto(manito.getId(), manito.getName(), manito.getEndDateTime(),
+                    manito.getStatus(), manito.getInviteLink(), (ArrayList<ManitoMember>) manito.getManitoMembers()));
+        }
+        return findManitos;
+    }
+
 
 }
