@@ -16,11 +16,11 @@ public class MemberRelation extends BaseEntity {
     @Column(name = "MEMBER_RELATION_ID")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinColumn(referencedColumnName = "MEMBER_ID", name = "INVITING_MEMBER_ID", nullable = false)
     private Member invitingMember;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinColumn(referencedColumnName = "MEMBER_ID", name = "INVITED_MEMBER_ID", nullable = false)
     private Member invitedMember;
 
