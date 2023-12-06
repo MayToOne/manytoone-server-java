@@ -101,7 +101,7 @@ class ManitoMemberRepositoryTest {
                 .build();
         manitoMemberRepository.save(testManitoMember1);
         testManitoMember1.updateManitoMember(1, "인사이드아웃",
-                "야구글러브", "술", true);
+                "야구글러브", "술", true, null);
         ManitoMember findManitoMember = manitoMemberRepository.findById(testManitoMember1.getId()).get();
         assertThat(findManitoMember.getStatus()).isEqualTo(1);
         assertThat(findManitoMember.getNickname()).isEqualTo("인사이드아웃");
