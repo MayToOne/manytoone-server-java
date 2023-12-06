@@ -11,7 +11,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@ToString()
+@ToString(exclude = {"member", "manito", "mymanito"})
 public class ManitoMember extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,7 +19,7 @@ public class ManitoMember extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MEMBER_ID", nullable = false)
+    @JoinColumn(referencedColumnName = "MEMBER_ID", name = "MEMBER_ID", nullable = false)
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -41,13 +41,36 @@ public class ManitoMember extends BaseEntity {
     @Column(name = "MANITO_MEMBER_STATUS", nullable = false)
     private Boolean isLeader;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(referencedColumnName = "MEMBER_ID", name = "MY_MANITO")
+    private Member myManito;
+
     public void updateManitoMember(Integer statusUpdateParam, String nicknameUpdateParam,
                                    String wantedGiftUpdateParam, String unwantedGiftUpdateParam,
-                                   Boolean isLeaderUpdateParam) {
+                                   Boolean isLeaderUpdateParam, Member myManito) {
         this.status = statusUpdateParam;
         this.nickname = nicknameUpdateParam;
         this.wantedGift = wantedGiftUpdateParam;
         this.unwantedGift = unwantedGiftUpdateParam;
         this.isLeader = isLeaderUpdateParam;
+        this.myManito = myManito;
+    }
+
+    public void addGiftInfos(String wantedGift, String unwantedGift) {
+        this.wantedGift = wantedGift;
+        this.unwantedGift = unwantedGift;
+    }
+
+    public void editMyManito(Member myManito) {
+        this.myManito = myManito;
+    }
+
+    public void editInviteStatus(Integer status) {
+        this.status = status;
+    }
+
+    public void editGiftInfo(String wantedGift, String unwantedGift) {
+        this.wantedGift = wantedGift;
+        this.unwantedGift = unwantedGift;
     }
 }
