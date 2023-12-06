@@ -10,7 +10,7 @@ public interface ManitoMemberRepositoryCustom {
 
     List<ManitoMember> findMyManitoInvites(Long memberId);
 
-    Optional<ManitoMember> findByMemberIdAndManitoId(Long memberId, Long manitoId);
+    Optional<ManitoMember> findByMemberIdAndManitoId(Long memberId, Long manitoId, Integer status);
 
     List<Manito> findMyManito(Long memberId);
 }

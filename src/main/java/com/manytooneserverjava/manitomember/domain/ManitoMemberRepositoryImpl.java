@@ -41,7 +41,7 @@ public class ManitoMemberRepositoryImpl implements ManitoMemberRepositoryCustom 
     }
 
     @Override
-    public Optional<ManitoMember> findByMemberIdAndManitoId(Long memberId, Long manitoId) {
+    public Optional<ManitoMember> findByMemberIdAndManitoId(Long memberId, Long manitoId, Integer status) {
         ManitoMember result = query
                 .select(manitoMember)
                 .from(manitoMember)
@@ -50,7 +50,7 @@ public class ManitoMemberRepositoryImpl implements ManitoMemberRepositoryCustom 
                 .where(
                         (member.id.eq(memberId))
                                 .and(manito.id.eq(manitoId))
-                                .and(manitoMember.status.eq(1)))
+                                .and(eqStatus(status)))
                 .fetchOne();
         return Optional.ofNullable(result);
     }
