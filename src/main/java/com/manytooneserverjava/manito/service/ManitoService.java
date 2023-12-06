@@ -57,14 +57,19 @@ public class ManitoService {
     @Transactional
     public void initiateManito(Long manitoId) {
         // 가입된 마니또 회원 목록 조회
-        List<ManitoMember> manitoMembersInSameGroup = manitoMemberRepository.findManitoMembersInSameGroup(manitoId, 1);
+        List<ManitoMember> joinedManitoMember = manitoMemberRepository.findManitoMembersInSameGroup(manitoId, 1);
+
+        // 초대를 승락하지 않은 회원의 경우 삭제
+        List<ManitoMember> notJoinedManitoMember = manitoMemberRepository.findManitoMembersInSameGroup(manitoId, 0);
+        manitoMemberRepository.deleteAll(notJoinedManitoMember);
+
         // 마니또 매칭 코드
-        HashMap<ManitoMember, ManitoMember> match = matchManito(manitoMembersInSameGroup);
+        HashMap<ManitoMember, ManitoMember> match = matchManito(joinedManitoMember);
         // 마니또 매칭 내역 적용
         for (ManitoMember manitoMember : match.keySet()) manitoMember.editMyManito(match.get(manitoMember).getMember());
         // 마니또 모임 상태 변경
-        Manito findManito = manitoRepository.findById(manitoId).get();
-        findManito.updateManito(true, findManito.getEndDateTime());
+//        Manito findManito = manitoRepository.findById(manitoId).get();
+//        findManito.updateManito(true, findManito.getEndDateTime());
     }
 
     /**
@@ -75,13 +80,14 @@ public class ManitoService {
     @Transactional
     public void endManito(Long manitoId) {
         Manito findManito = manitoRepository.findById(manitoId).get();
-        findManito.updateManito(false, findManito.getEndDateTime());
+        findManito.updateManito(true, findManito.getEndDateTime());
     }
 
-    public List<Manito> findMyManito(Long memberId) {
-        return null;
+    @Transactional
+    public void deleteManito(Long manitoId) {
+        Manito findManito = manitoRepository.findById(manitoId).get();
+        manitoRepository.delete(findManito);
     }
-
 
     /**
      * 마니또 매칭 매서드
