@@ -32,7 +32,7 @@ public class Manito extends BaseEntity {
     @Column(name = "MANITO_INVITE_LINK")
     private String inviteLink;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     @JoinColumn(name = "manito_id")
     private List<ManitoMember> manitoMembers = new ArrayList<>();
 

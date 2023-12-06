@@ -18,11 +18,11 @@ public class ManitoMember extends BaseEntity {
     @Column(name = "MANITO_MEMBER_ID")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(referencedColumnName = "MEMBER_ID", name = "MEMBER_ID", nullable = false)
     private Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MANITO_ID", nullable = false)
     private Manito manito;
 
