@@ -1,8 +1,8 @@
 ---
-name: 'Issue: feat'
-about: For adding features.
-title: "[Feat]"
-labels: feature
+name: 'Issue: enhancement'
+about: For minor updates.
+title: "[Enhancement]"
+labels: enhancement
 assignees: ''
 
 ---
