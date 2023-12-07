@@ -6,6 +6,7 @@ import com.manytooneserverjava.manito.web.dto.ManitoDto;
 import com.manytooneserverjava.manito.web.dto.ManitoResponse;
 import com.manytooneserverjava.manito.web.dto.ManitoUpdateForm;
 import com.manytooneserverjava.manitomember.service.ManitoMemberService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,7 @@ public class ManitoController {
     private final ManitoMemberService manitoMemberService;
 
     @PostMapping
-    public ResponseEntity<?> createManito(@RequestBody ManitoCreateForm form) {
+    public ResponseEntity<?> createManito(@RequestBody @Valid ManitoCreateForm form) {
         Long createdManitoId = manitoService.createManito(form);
         return ResponseEntity.created(
                         ServletUriComponentsBuilder
@@ -38,7 +39,7 @@ public class ManitoController {
     }
 
     @PutMapping("/update/{manitoId}")
-    public ResponseEntity<ManitoResponse<Long>> updateManito(@PathVariable(name = "manitoId") Long manitoId, @RequestBody ManitoUpdateForm form) {
+    public ResponseEntity<ManitoResponse<Long>> updateManito(@PathVariable(name = "manitoId") Long manitoId, @RequestBody @Valid ManitoUpdateForm form) {
         ManitoResponse<Long> response = new ManitoResponse<>(OK.value(), MANITO_UPDATE_SUCCESS, manitoService.updateManito(manitoId, form));
         return ResponseEntity.ok(response);
     }

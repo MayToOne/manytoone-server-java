@@ -70,6 +70,8 @@ public class ManitoMember extends BaseEntity {
     }
 
     public void editGiftInfo(String wantedGift, String unwantedGift) {
+        if (wantedGift!= null && wantedGift.isBlank()) wantedGift = null;
+        if (unwantedGift != null && unwantedGift.isBlank()) unwantedGift = null;
         this.wantedGift = wantedGift;
         this.unwantedGift = unwantedGift;
     }

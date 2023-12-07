@@ -106,7 +106,7 @@ public class ManitoService {
     @Transactional
     public Long updateManito(Long manitoId, ManitoUpdateForm form) {
         Manito findManito = manitoRepository.findById(manitoId).get();
-        findManito.updateManito(form.status(), form.endDatetime());
+        findManito.updateManito(form.status(), form.endDateTime());
         return findManito.getId();
     }
 
