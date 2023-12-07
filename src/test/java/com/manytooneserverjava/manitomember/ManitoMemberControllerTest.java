@@ -78,7 +78,7 @@ class ManitoMemberControllerTest {
 
     @Test
     @Transactional
-    void inviteManitoMember() throws Exception {
+    void inviteManitoMemberSuccess() throws Exception {
         Manito findManito = manitoRepository.findByName("testManito2").get();
         Member findMember = memberRepository.findByName("tester03").get();
         String req = """
@@ -96,7 +96,23 @@ class ManitoMemberControllerTest {
 
     @Test
     @Transactional
-    void updateInviteStatus() throws Exception {
+    void inviteManitoMemberValidationFail() throws Exception {
+        String req = """
+            {
+                "manitoId" : "%d",
+                "memberId" : "%d"
+            }
+                """;
+        mockMvc.perform(post(BASE_URI)
+                        .content(req.formatted(null, null))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+    }
+
+    @Test
+    @Transactional
+    void updateInviteStatusSuccess() throws Exception {
         String req = """
             {
                 "manitoMemberId" : "%d",
@@ -109,7 +125,32 @@ class ManitoMemberControllerTest {
         mockMvc.perform(put(BASE_URI + "/updateStatus")
                         .content(req.formatted(findManitoMember.getId(), 1))
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+    @Test
+    @Transactional
+    void updateInviteStatusValidationFail() throws Exception {
+        String req = """
+            {
+                "manitoMemberId" : "%d",
+                "manitoMemberStatus" : "%d"
+            }
+                """;
+        Manito findManito = manitoRepository.findByName("testManito1").get();
+        Member findMember = memberRepository.findByName("tester03").get();
+        ManitoMember findManitoMember = manitoMemberRepository.findByMemberIdAndManitoId(findMember.getId(), findManito.getId(), null).get();
+        mockMvc.perform(put(BASE_URI + "/updateStatus")
+                        .content(req.formatted(findManitoMember.getId(), 3))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+
+        mockMvc.perform(put(BASE_URI + "/updateStatus")
+                        .content(req.formatted(null, 3))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
     }
 
     @Test
@@ -123,7 +164,7 @@ class ManitoMemberControllerTest {
 
     @Test
     @Transactional
-    void updateGiftInfo() throws Exception {
+    void updateGiftInfoSuccess() throws Exception {
         String req = """
             {
                 "manitoMemberId" : "%d",
@@ -138,6 +179,23 @@ class ManitoMemberControllerTest {
                         .content(req.formatted(findManitoMember.getId(), "guitar", "lamp"))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    @Transactional
+    void updateGiftInfoValidationFail() throws Exception {
+        String req = """
+            {
+                "manitoMemberId" : "%d",
+                "wantedGift" : "%s",
+                "unwantedGift" : "%s"
+            }
+                """;
+        mockMvc.perform(put(BASE_URI + "/updateGiftInfo")
+                        .content(req.formatted(null, "guitar", "lamp"))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
                 .andDo(print());
     }
 

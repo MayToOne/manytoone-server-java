@@ -76,15 +76,15 @@ class ManitoControllerTest {
 
     @Test
     @Transactional
-    void createManito() throws Exception {
+    void createManitoSuccess() throws Exception {
         Member tester01 = memberRepository.findByName("tester01").get();
         String req = """
-            {
-                "memberId" : "%d",
-                "name" : "%s",
-                "endDateTime" : "%s"
-            }
-                """;
+                {
+                    "memberId" : "%d",
+                    "name" : "%s",
+                    "endDateTime" : "%s"
+                }
+                    """;
 
         mockMvc.perform(
                         post(BASE_URI)
@@ -97,18 +97,63 @@ class ManitoControllerTest {
 
     @Test
     @Transactional
-    void updateManito() throws Exception {
+    void createManitoValidationFail() throws Exception {
+        Member tester01 = memberRepository.findByName("tester01").get();
+        String req = """
+                {
+                    "memberId" : "%d",
+                    "name" : "%s",
+                    "endDateTime" : "%s"
+                }
+                    """;
+
+        mockMvc.perform(
+                        post(BASE_URI)
+                                .content(req.formatted(null, "", ""))
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+        assertThat(manitoRepository.findByName("mockManito").isPresent()).isFalse();
+    }
+
+    @Test
+    @Transactional
+    void updateManitoSuccess() throws Exception {
         Manito testManito1 = manitoRepository.findByName("testManito1").get();
         String req = """
-            {
-                "status" : "%d",
-                "endDateTime" : "%s"
-            }
-                """;
+                {
+                    "status" : "%d",
+                    "endDateTime" : "%s"
+                }
+                    """;
         mockMvc.perform(put(BASE_URI + "/update/" + testManito1.getId())
                         .content(req.formatted(1, "2023-12-25 12:00"))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
+                .andDo(print());
+
+    }
+
+    @Test
+    @Transactional
+    void updateManitoValidationFali() throws Exception {
+        Manito testManito1 = manitoRepository.findByName("testManito1").get();
+        String req = """
+                {
+                    "status" : "%d",
+                    "endDateTime" : "%s"
+                }
+                    """;
+        mockMvc.perform(put(BASE_URI + "/update/" + testManito1.getId())
+                        .content(req.formatted(null, ""))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+
+        mockMvc.perform(put(BASE_URI + "/update/" + testManito1.getId())
+                        .content(req.formatted(4, "2023-12-25 12:00"))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
                 .andDo(print());
 
     }
