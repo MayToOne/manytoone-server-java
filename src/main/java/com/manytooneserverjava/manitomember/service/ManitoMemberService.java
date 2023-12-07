@@ -2,11 +2,11 @@ package com.manytooneserverjava.manitomember.service;
 
 import com.manytooneserverjava.manito.domain.Manito;
 import com.manytooneserverjava.manito.domain.ManitoRepository;
-import com.manytooneserverjava.manito.web.ManitoDto;
+import com.manytooneserverjava.manito.web.dto.ManitoDto;
 import com.manytooneserverjava.manitomember.domain.ManitoMember;
 import com.manytooneserverjava.manitomember.domain.ManitoMemberRepository;
-import com.manytooneserverjava.manitomember.web.GiftInfoForm;
-import com.manytooneserverjava.manitomember.web.ManitoMemberDto;
+import com.manytooneserverjava.manitomember.web.dto.GiftInfoForm;
+import com.manytooneserverjava.manitomember.web.dto.ManitoMemberDto;
 import com.manytooneserverjava.member.domain.Member;
 import com.manytooneserverjava.member.domain.MemberRepository;
 import jakarta.transaction.Transactional;
@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.manytooneserverjava.common.message.ExceptionMessage.*;
 
 @Service
 @RequiredArgsConstructor
@@ -84,6 +86,23 @@ public class ManitoMemberService {
         findManitoMember.editGiftInfo(form.wantedGift(), form.unwantedGift());
     }
 
+    @Transactional
+    public void leaveManito(Long manitoMemberId) {
+        ManitoMember findManitoMember = manitoMemberRepository.findById(manitoMemberId).get();
+        System.out.println("findManitoMember = " + findManitoMember);
+        boolean isIntiated = findManitoMember.getManito().getStatus() == 1;
+        System.out.println("isIntiated = " + isIntiated);
+        Boolean isLeader = findManitoMember.getIsLeader();
+        if (isIntiated) throw new IllegalStateException(MANITO_ALREADY_INITIATED);
+        if (isLeader) throw new IllegalStateException(MANITO_MEMBER_LEADER_CANNOT_LEAVE);
+        manitoMemberRepository.delete(findManitoMember);
+    }
+
+    /**
+     * 가입된 마니또를 조회하는 매서드
+     * @param memberId
+     * @return
+     */
     public List<ManitoDto> findMyManitos(Long memberId) {
         List<Manito> myManitos = manitoMemberRepository.findMyManito(memberId);
         List<ManitoDto> findManitos = new ArrayList<>();

@@ -2,7 +2,6 @@ package com.manytooneserverjava.manito;
 
 import com.manytooneserverjava.manito.domain.Manito;
 import com.manytooneserverjava.manito.domain.ManitoRepository;
-import com.manytooneserverjava.member.domain.Member;
 import com.manytooneserverjava.member.domain.MemberRepository;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
@@ -31,19 +30,19 @@ public class ManitoRepositoryTest {
     void beforeEach() {
         Manito testManito1 = Manito.builder()
                 .name("test1")
-                .status(true)
+                .status(0)
                 .endDateTime(LocalDateTime.now().plusHours(3))
                 .build();
 
         Manito testManito2 = Manito.builder()
                 .name("test2")
-                .status(true)
+                .status(0)
                 .endDateTime(LocalDateTime.now().plusHours(3))
                 .build();
 
         Manito testManito3 = Manito.builder()
                 .name("test3")
-                .status(true)
+                .status(0)
                 .endDateTime(LocalDateTime.now().plusHours(3))
                 .build();
         manitoRepository.save(testManito1);
@@ -62,7 +61,7 @@ public class ManitoRepositoryTest {
     void saveTest() {
         Manito testManito = Manito.builder()
                 .name("saveTest")
-                .status(true)
+                .status(0)
                 .endDateTime(LocalDateTime.now().plusHours(3))
                 .build();
         manitoRepository.save(testManito);
@@ -75,11 +74,11 @@ public class ManitoRepositoryTest {
     void updateTest() {
         Manito findManito = manitoRepository.findByName("test1").get();
         LocalDateTime updateEndDateParam = LocalDateTime.now().plusDays(7);
-        boolean updateStatusParam = false;
+        Integer updateStatusParam = 1;
         findManito.updateManito(updateStatusParam, updateEndDateParam);
         Manito result = manitoRepository.findById(findManito.getId()).get();
         assertThat(result.getEndDateTime()).isEqualTo(updateEndDateParam);
-        assertThat(result.getStatus()).isEqualTo(updateStatusParam);
+        assertThat(result.getStatus()).isEqualTo(1);
     }
 
     @Test

@@ -1,4 +1,4 @@
-package com.manytooneserverjava.manitomember.web;
+package com.manytooneserverjava.manitomember.web.dto;
 
 import com.manytooneserverjava.manito.domain.Manito;
 import com.manytooneserverjava.member.domain.Member;
