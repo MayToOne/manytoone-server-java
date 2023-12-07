@@ -26,8 +26,8 @@ public class Manito extends BaseEntity {
     @Column(name = "MANITO_END_DATETIME", nullable = false)
     private LocalDateTime endDateTime;
 
-    @Column(name = "MANITO_STATUS", nullable = false)
-    private Boolean status;
+    @Column(name = "MANITO_ENABLED_TYPE", nullable = false)
+    private Integer status;
 
     @Column(name = "MANITO_INVITE_LINK")
     private String inviteLink;
@@ -36,7 +36,7 @@ public class Manito extends BaseEntity {
     @JoinColumn(name = "manito_id")
     private List<ManitoMember> manitoMembers = new ArrayList<>();
 
-    public void updateManito(Boolean updateStatusParam, LocalDateTime updateEndDateTimeParam) {
+    public void updateManito(Integer updateStatusParam, LocalDateTime updateEndDateTimeParam) {
         this.status = updateStatusParam;
         this.endDateTime = updateEndDateTimeParam;
     }
