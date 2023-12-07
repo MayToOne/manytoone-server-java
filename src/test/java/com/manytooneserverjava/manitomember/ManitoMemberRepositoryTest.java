@@ -49,13 +49,13 @@ class ManitoMemberRepositoryTest {
 
         Manito testManito1 = Manito.builder()
                 .name("test1")
-                .status(true)
+                .status(0)
                 .endDateTime(LocalDateTime.now().plusHours(3))
                 .build();
 
         Manito testManito2 = Manito.builder()
                 .name("test2")
-                .status(true)
+                .status(0)
                 .endDateTime(LocalDateTime.now().plusHours(3))
                 .build();
 

@@ -3,7 +3,7 @@ package com.manytooneserverjava.manito;
 import com.manytooneserverjava.manito.domain.Manito;
 import com.manytooneserverjava.manito.domain.ManitoRepository;
 import com.manytooneserverjava.manito.service.ManitoService;
-import com.manytooneserverjava.manito.web.ManitoCreateForm;
+import com.manytooneserverjava.manito.web.dto.ManitoCreateForm;
 import com.manytooneserverjava.manitomember.domain.ManitoMember;
 import com.manytooneserverjava.manitomember.domain.ManitoMemberRepository;
 import com.manytooneserverjava.manitomember.service.ManitoMemberService;
@@ -119,7 +119,7 @@ class ManitoServiceTest {
         Manito testManito = manitoRepository.findByName("testManito1").get();
         manitoService.endManito(testManito.getId());
         Manito findManito = manitoRepository.findById(testManito.getId()).get();
-        assertThat(findManito.getStatus()).isEqualTo(true);
+        assertThat(findManito.getStatus()).isEqualTo(2);
     }
 
     @Test
